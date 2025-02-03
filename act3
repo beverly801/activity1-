@@ -1,0 +1,86 @@
+import React, { useState } from 'react';
+import { View, FlatList, StyleSheet, TouchableOpacity, Text, StatusBar } from 'react-native';
+import { SafeAreaView, SafeAreaProvider } from 'react-native-safe-area-context';
+
+// Sample data
+const DATA = [
+  { id: '1', title: 'Morning Routine' },
+  { id: '2', title: 'Taking a Bath' },
+  { id: '3', title: 'Check my Emails' },
+  { id: '4', title: 'Prepare for School' },
+  { id: '5', title: 'Read Books' },
+  { id: '6', title: 'Afternoon Routine' },
+  { id: '7', title: 'Lunch' },
+  { id: '8', title: 'Drink Water' },
+  { id: '9', title: 'Stretch' },
+  { id: '10', title: 'Evening Routine' },
+];
+
+// Array of colors to use for each item
+const colors = [
+  '#ff6347', // Tomato
+  '#32cd32', // Lime Green
+  '#1e90ff', // Dodger Blue
+  '#ff1493', // Deep Pink
+  '#ff8c00', // Dark Orange
+  '#9932cc', // Dark Orchid
+  '#00bfff', // Deep Sky Blue
+  '#ff4500', // Orange Red
+  '#adff2f', // Green Yellow
+  '#d2691e', // Chocolate
+];
+
+const App = () => {
+  // State to track the selected item
+  const [selectedId, setSelectedId] = useState<string | null>(null);
+
+  const handlePress = (id: string) => {
+    setSelectedId(id === selectedId ? null : id); // Toggle the selection
+  };
+
+  const Item = ({ title, id, index }: { title: string; id: string; index: number }) => (
+    <TouchableOpacity
+      style={[
+        styles.item,
+        { backgroundColor: colors[index % colors.length] }, // Assign color based on the index
+      ]}
+      onPress={() => handlePress(id)}
+    >
+      <Text style={styles.title}>{title}</Text>
+    </TouchableOpacity>
+  );
+
+  return (
+    <SafeAreaProvider>
+      <SafeAreaView style={styles.container}>
+        <FlatList
+          data={DATA}
+          renderItem={({ item, index }) => (
+            <Item title={item.title} id={item.id} index={index} />
+          )}
+          keyExtractor={(item) => item.id}
+        />
+      </SafeAreaView>
+    </SafeAreaProvider>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    marginTop: StatusBar.currentHeight || 0,
+  },
+  item: {
+    padding: 20,
+    marginVertical: 8,
+    marginHorizontal: 16,
+    borderRadius: 8,
+  },
+  title: {
+    fontSize: 18,
+    fontWeight: '500',
+  },
+});
+
+export default App;
+
